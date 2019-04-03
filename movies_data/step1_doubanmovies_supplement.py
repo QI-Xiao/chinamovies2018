@@ -5,22 +5,27 @@ import time
 import re
 import random
 
-# 进入豆瓣每一部电影的页面，通过其上映日期和名称判断是否是所要的电影
+
 def douban_detail(url_detail):
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36',
     }
     req = requests.get(url_detail,headers=headers)# , proxies=proxies
     soup = BeautifulSoup(req.text, 'lxml')
-    releasedate = soup.find("div",id="info").find("span",property="v:initialReleaseDate",content=re.compile("2018.*(中国大陆)"))
+    releasedate = soup.find("div",id="info").find("span",property="v:initialReleaseDate",content=re.compile("2018.*"))
     name = soup.find("div", id="content").h1.find("span", property=True).string
     time.sleep(1.5+random.random())
     if releasedate:
         print(name, ': ', releasedate.string)
-        return True
+
+        # 这里，如果输入了一个值，就认为是符合要求的；如果不符合，回车跳过即可
+        if input('是否符合'):
+            print('True')
+            return True
+    print('False')
     print(name, ': 没有信息')
 
-# 从豆瓣api中搜索输入的电影名称，通过 douban_detail 函数判断是否符合条件
+
 def douban_api(moviename):
     # proxies = {'https':'1.192.241.250',}
     headers = {
@@ -29,7 +34,7 @@ def douban_api(moviename):
     }
     url_api = 'https://api.douban.com/v2/movie/search?q={}'.format(moviename)
     print(url_api)
-    req = requests.get(url_api, headers=headers)#, proxies=proxies)#
+    req = requests.get(url_api, headers=headers)
     data_total = req.json()['subjects']
     time.sleep(4+random.random())
     # print(data_total)
@@ -38,31 +43,29 @@ def douban_api(moviename):
         return
 
     for data in data_total:
-        if data['title'] != moviename:
-            print(data['title'], ': 没有信息')
-        else:
-            url_detail = data['alt']
-            if douban_detail(url_detail):
-                print('搜索到结果:', moviename)
-                return data
+        url_detail = data['alt']
+        if douban_detail(url_detail):
+            print('搜索到结果:', moviename)
+            return data
     print('搜索结果中没有符合的条件：', moviename)
 
-# 根据中国票房网得到的电影数据，从豆瓣中获得更详细的数据
-def douban_movies():
+
+def douban_movies(movie_now):
     client = pymongo.MongoClient()
     db = client.chinamovies
     collections = db.movies
     collections_detail = db.moviesdetail
     # db.drop_collection('movies')
 
-    count = 0
-    for i in collections.find():
+    with open('notexistmovie.txt', 'r', encoding='utf-8') as f:
+        movies = f.read().split()
+    print(movies)
+
+    for count, moviename in enumerate(movies[movie_now:]):
         with open('movieid.txt', 'r') as f:
             movieid = f.read().split()
-        count += 1
+
         print(count)
-        print(i['MovieName'])
-        moviename = i['MovieName']
         datadetail = douban_api(moviename)
         # print(datadetail)
         if datadetail:
@@ -75,8 +78,9 @@ def douban_movies():
             else:
                 print('该电影已存在，id：', datadetail['id'], datadetail['title'])
         else:
-            with open('notexistmovie.txt', 'a', encoding='utf-8') as f3:
-                f3.write(' '+i['MovieName'])
+            with open('notexistmovie_twice.txt', 'a', encoding='utf-8') as f3:
+                f3.write(' '+moviename)
         print('========================================')
 
-# douban_movies()
+# 作为 step1_doubanmovies.py 的补充，与其代码基本一致，但在几个函数中加了 input，通过手动输入值进行人工判断，用来寻找在 step1_doubanmovies 中由于名称原因没有找到的电影
+douban_movies(0)

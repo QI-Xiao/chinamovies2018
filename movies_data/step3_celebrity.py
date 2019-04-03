@@ -12,6 +12,7 @@ col_casts = db.casts
 col_directors = db.directors
 # db.drop_collection('casts')
 
+
 # 新建一个影人条目的数据表
 def createcelebrity():
     movie_id = {}
@@ -32,6 +33,7 @@ def createcelebrity():
         col_casts.update_one({'id': k}, {'$set': {'movie_id': movie_id[k], 'movie': movie_name[k], 'name': movie_cele[k]}}, upsert=True)
         print('新建一个影人条目')
 
+
 # 计算每个影人2018年参演电影的票房总和
 def cal_boxoffice():
     for i in col_casts.find():
@@ -43,6 +45,7 @@ def cal_boxoffice():
                 total_box += int(movie['boxoffice'])
         print('total_box:', total_box)
         col_casts.update_one({'_id': i['_id']}, {'$set': {'total_box': total_box}}, upsert=True)
+
 
 # 新建一个导演条目的数据表
 def createdirector():
@@ -64,6 +67,7 @@ def createdirector():
         col_directors.update_one({'id': k}, {'$set': {'movie_id': movie_id[k], 'movie': movie_name[k], 'name': movie_cele[k]}}, upsert=True)
         print('新建一个导演条目')
 
+
 # 计算每个导演2018年导演电影的票房总和
 def cal_dir_boxoffice():
     for i in col_directors.find():
@@ -77,6 +81,11 @@ def cal_dir_boxoffice():
         col_directors.update_one({'_id': i['_id']}, {'$set': {'total_box': total_box}}, upsert=True)
 
 
-# 对影人参演电影票房总和排了个序
-for i in col_casts.find().sort('total_box',1):
-    print(i)
+# createcelebrity()
+# cal_boxoffice()
+# createdirector()
+# cal_dir_boxoffice()
+
+# # 对影人参演电影票房总和排了个序
+# for i in col_casts.find().sort('total_box',1):
+#     print(i)
