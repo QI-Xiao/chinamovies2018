@@ -75,7 +75,7 @@
 
 #### 所有图表
 1. ![电影评分-票房](movie_draws/pictures/1.png)
-2. ![电影评分对比（豆瓣-imdb）](movie_draws/pictures/pictures/2.png)
+2. ![电影评分对比（豆瓣-imdb）](movie_draws/pictures/2.png)
 3. ![电影评分对比（豆瓣-猫眼）](movie_draws/pictures/3.png)
 4. ![电影评分对比（豆瓣-时光）](movie_draws/pictures/4.png)
 5. ![2018总票房排名](movie_draws/pictures/5.png)
