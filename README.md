@@ -73,3 +73,15 @@
       ```
 + 绘图：利用 pyecharts 绘图，pyecharts 使用可见官方文档：<http://pyecharts.org/>
 
+#### 所有图表
+0. [总表](movie_draws/2018电影总表20190306.html)
+1. [电影评分-票房](movie_draws/电影评分-票房.html)
+2. [电影评分对比（豆瓣-imdb）](movie_draws/douban-imdb.html)
+3. [电影评分对比（豆瓣-猫眼）](movie_draws/douban-maoyan.html)
+4. [电影评分对比（豆瓣-时光）](movie_draws/douban-mtime.html)
+5. [2018总票房排名](movie_draws/总排名.html)
+6. [类型-票房](movie_draws/类型-票房.html)
+7. [类型-评分](movie_draws/类型-评分.html)
+8. [月份票房叠加](movie_draws/月份票房.html)
+8. [2018年演员参演电影总票房排名](movie_draws/演员参演电影总票房前十.html)
+
